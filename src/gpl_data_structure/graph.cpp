@@ -11,6 +11,9 @@
 void Graph::set(size_t n){
     numV = n;
     adList = vector<edgeList>(2*n,edgeList());
+    updateSeqFile << "# " << changeRatio*n << std::endl;
+    for(int i=0; i < n; i++)
+	    updateSeqFile << "2 " << i << " 1" << std::endl;
 }
 void Graph::add_edge(unsigned int v1,unsigned int v2){
 #ifdef DYNAMIS_DEBUG
@@ -18,6 +21,7 @@ void Graph::add_edge(unsigned int v1,unsigned int v2){
 #endif
     adList[v1].insert(v2);
     adList[v2].insert(v1);
+    updateSeqFile << "0 " << v1 << " " << v2 << std::endl;
 };
 // check if one edge between two vertices exists
 // v1: vertexID
@@ -29,17 +33,22 @@ bool Graph::containEdge(unsigned int v1, unsigned int v2){
 void Graph::delete_edge(unsigned int v1, unsigned int v2){
     adList[v1].erase(v2);
     adList[v2].erase(v1);
+    updateSeqFile << "1 " << v1 << " " << v2 << std::endl;
 };
 void Graph::add_vertex(unsigned int index, vector<int>& neighbors){
+	std::cout << "creating vertex " << index << std::endl;
 	numV++;
 	adList[index].clear();
+    	updateSeqFile << "2 " << index << " 1" << std::endl;
 	for(const auto& n : neighbors)
 	add_edge(index,n);
+
 };
 void Graph::delete_vertex(unsigned int index,unsigned int replace){
 	for(const auto& n: adList[index]){
 		adList[n].erase(index);
 	}
+	updateSeqFile << "3 " << index << std::endl;
 	if(index == replace){
 		//assert(replace == numV-1);
 		numV--;

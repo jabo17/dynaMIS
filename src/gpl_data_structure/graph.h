@@ -22,9 +22,16 @@ using namespace std;
 typedef unordered_set<unsigned int> edgeList;
 class Graph {
 public:
-    Graph() {};
+    Graph() {
+    	updateSeqFile.open("out_update.graph.seq");
+    };
+    ~Graph() {
+	updateSeqFile.close();
+    }
     void set(size_t n);
     vector<edgeList> adList;
+
+    std::ofstream updateSeqFile;
 
     void add_edge(unsigned int source, unsigned int target);
     bool containEdge(unsigned int source, unsigned int target);

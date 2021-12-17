@@ -28,6 +28,7 @@ bool solver_graph::add_point(const Point_2& p) {
 		if (v_index == index) continue;
 		neighbors.push_back(v_index);
 	}
+	std::cout << "adding vertex " << index << std::endl;
 	conflict_graph.add_vertex(index, neighbors);
 	return true;
 };
